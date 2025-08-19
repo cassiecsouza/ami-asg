@@ -1,0 +1,150 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Launch Template + Auto Scaling Group (ASG) using Harness service variables
+
+Parameters:
+  VpcSubnets:
+    Type: CommaDelimitedList
+    Description: Subnet IDs for the ASG (e.g., subnet-aaa,subnet-bbb)
+
+Resources:
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub "${AWS::StackName}-lt"
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Name: "<+serviceVariables.twilioRole>"
+        InstanceType: "<+serviceVariables.ec2InstanceType>"
+        Monitoring:
+          Enabled: true
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpTokens: required
+          HttpPutResponseHopLimit: 2
+          InstanceMetadataTags: enabled
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: true
+            DeviceIndex: 0
+            Groups: <+serviceVariables.securityGroupIDs.split(",")>
+        BlockDeviceMappings:
+          - DeviceName: /dev/xvda
+            Ebs:
+              DeleteOnTermination: true
+              Encrypted: true
+              VolumeType: gp3
+              VolumeSize: <+serviceVariables.rootEbsVolumeSize>
+          - DeviceName: /dev/sdm
+            Ebs:
+              DeleteOnTermination: true
+              Encrypted: true
+              VolumeType: gp3
+              VolumeSize: <+serviceVariables.dataEbsVolumeSize>
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: claimed_ownership
+                Value: "true"
+              - Key: creator
+                Value: harness
+              - Key: platform:managed-by
+                Value: autoscaling-group
+              - Key: platform:role
+                Value: "<+serviceVariables.twilioRole>"
+              - Key: platform:system
+                Value: "<+serviceVariables.twilioSystem>"
+              - Key: platform:team
+                Value: "<+serviceVariables.twilioTeam>"
+              - Key: tcss:classification
+                Value: "<+serviceVariables.securityClassification>"
+              - Key: tcss:owner
+                Value: "<+serviceVariables.twilioTeam>"
+              - Key: tcss:repo
+                Value: "<+serviceVariables.creatorGitRepo>"
+              - Key: tcss:tag-version
+                Value: "1"
+          - ResourceType: volume
+            Tags:
+              - Key: claimed_ownership
+                Value: "true"
+              - Key: creator
+                Value: harness
+              - Key: platform:managed-by
+                Value: autoscaling-group
+              - Key: platform:role
+                Value: "<+serviceVariables.twilioRole>"
+              - Key: platform:system
+                Value: "<+serviceVariables.twilioSystem>"
+              - Key: platform:team
+                Value: "<+serviceVariables.twilioTeam>"
+              - Key: tcss:classification
+                Value: "<+serviceVariables.securityClassification>"
+              - Key: tcss:owner
+                Value: "<+serviceVariables.twilioTeam>"
+              - Key: tcss:repo
+                Value: "<+serviceVariables.creatorGitRepo>"
+              - Key: tcss:tag-version
+                Value: "1"
+      # (Optional) tag the Launch Template *resource* itself
+      Tags:
+        - Key: claimed_ownership
+          Value: "true"
+        - Key: creator
+          Value: harness
+        - Key: platform:managed-by
+          Value: autoscaling-group
+        - Key: platform:role
+          Value: "<+serviceVariables.twilioRole>"
+        - Key: platform:system
+          Value: "<+serviceVariables.twilioSystem>"
+        - Key: platform:team
+          Value: "<+serviceVariables.twilioTeam>"
+        - Key: tcss:classification
+          Value: "<+serviceVariables.securityClassification>"
+        - Key: tcss:owner
+          Value: "<+serviceVariables.twilioTeam>"
+        - Key: tcss:repo
+          Value: "<+serviceVariables.creatorGitRepo>"
+        - Key: tcss:tag-version
+          Value: "1"
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref VpcSubnets
+      MinSize: "1"                 # adjust as needed
+      MaxSize: "5"                 # adjust as needed
+      DesiredCapacity: "2"         # adjust as needed
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      Tags:                         # ASG-level tags (propagate to instances)
+        - Key: claimed_ownership
+          Value: "true"
+          PropagateAtLaunch: true
+        - Key: creator
+          Value: harness
+          PropagateAtLaunch: true
+        - Key: platform:managed-by
+          Value: autoscaling-group
+          PropagateAtLaunch: true
+        - Key: platform:role
+          Value: "<+serviceVariables.twilioRole>"
+          PropagateAtLaunch: true
+        - Key: platform:system
+          Value: "<+serviceVariables.twilioSystem>"
+          PropagateAtLaunch: true
+        - Key: platform:team
+          Value: "<+serviceVariables.twilioTeam>"
+          PropagateAtLaunch: true
+        - Key: tcss:classification
+          Value: "<+serviceVariables.securityClassification>"
+          PropagateAtLaunch: true
+        - Key: tcss:owner
+          Value: "<+serviceVariables.twilioTeam>"
+          PropagateAtLaunch: true
+        - Key: tcss:repo
+          Value: "<+serviceVariables.creatorGitRepo>"
+          PropagateAtLaunch: true
+        - Key: tcss:tag-version
+          Value: "1"
+          PropagateAtLaunch: true
