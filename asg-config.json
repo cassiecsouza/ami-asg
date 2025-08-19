@@ -1,0 +1,46 @@
+{
+  "DefaultCooldown": "300",
+  "HealthCheckGracePeriod": "0",
+  "HealthCheckType": "ELB",
+  "InstanceMaintenancePolicy": {
+    "MaxHealthyPercentage": "<+serviceVariables.normalMaxHealthyPercentage>",
+    "MinHealthyPercentage": "<+serviceVariables.normalMinHealthyPercentage>"
+  },
+  "LifecycleHookSpecificationList": [
+    {
+      "DefaultResult": "ABANDON",
+      "HeartbeatTimeout": 2000,
+      "LifecycleHookName": "asg_lifecycle_launching",
+      "LifecycleTransition": "autoscaling:EC2_INSTANCE_LAUNCHING"
+    },
+    {
+      "DefaultResult": "ABANDON",
+      "HeartbeatTimeout": 2000,
+      "LifecycleHookName": "asg_lifecycle_terminating",
+      "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING"
+    },
+    {
+      "DefaultResult": "ABANDON",
+      "HeartbeatTimeout": 2000,
+      "LifecycleHookName": "asg_shutdown_defender",
+      "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING"
+    }
+  ],
+  "Tags": [
+    { "Key": "TwilioRole", "Value": "<+serviceVariables.twilioRole>", "PropagateAtLaunch": "true" },
+    { "Key": "claimed_ownership", "Value": "true", "PropagateAtLaunch": "true" },
+    { "Key": "creator", "Value": "harness", "PropagateAtLaunch": "true" },
+    { "Key": "platform:managed-by", "Value": "autoscaling-group", "PropagateAtLaunch": "true" },
+    { "Key": "platform:role", "Value": "<+serviceVariables.twilioRole>", "PropagateAtLaunch": "true" },
+    { "Key": "platform:system", "Value": "<+serviceVariables.twilioSystem>", "PropagateAtLaunch": "true" },
+    { "Key": "platform:team", "Value": "<+serviceVariables.twilioTeam>", "PropagateAtLaunch": "true" },
+    { "Key": "realm", "Value": "<+serviceVariables.twilioRealm>", "PropagateAtLaunch": "true" },
+    { "Key": "tcss:classification", "Value": "<+serviceVariables.securityClassification>", "PropagateAtLaunch": "true" },
+    { "Key": "tcss:owner", "Value": "<+serviceVariables.twilioTeam>", "PropagateAtLaunch": "true" },
+    { "Key": "tcss:repo", "Value": "<+serviceVariables.creatorGitRepo>", "PropagateAtLaunch": "true" },
+    { "Key": "tcss:tag-version", "Value": "1", "PropagateAtLaunch": "true" },
+    { "Key": "world", "Value": "<+serviceVariables.twilioWorld>", "PropagateAtLaunch": "true" }
+  ],
+  "TargetGroupARNs": "<+serviceVariables.targetGroupARNs.split(\",\")>",
+  "VPCZoneIdentifier": "<+serviceVariables.enabledSubnetIds>"
+}
