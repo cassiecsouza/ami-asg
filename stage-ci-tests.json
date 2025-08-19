@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "build_timeout": 30,
+      "job_name": "voicecon_e2e",
+      "parameters": "BRANCH=master,REPO=git@code.hq.twilio.com:twilio/ohsip-scripts.git",
+      "queue_timeout": 30
+    },
+    {
+      "build_timeout": 30,
+      "job_name": "sixsigma_voice_gll",
+      "parameters": "",
+      "queue_timeout": 30
+    }
+  ]
+}
