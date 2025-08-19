@@ -18,25 +18,25 @@ grep -q '^ROLE=' /etc/environment || cat <<'EOF'>> /etc/environment
 
 BOOTED_EBS='/dev/sdm'
 
-CLOUD_INIT_SCRIPT_URLS='s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>'
+CLOUD_INIT_SCRIPT_URLS='s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>'
 
 CONTAINERIZE='docker'
 
-CONTAINERS='{"voicecon-bridge-bundle":{"downstreams":[],"environment":{},"image":"registry.twilio.com/twilio-internal/voice-bundles/voicecon-bridge:<+serviceVariables.voiceconBridgeBundleVersion>","lifecycle":{},"output":"none","secrets":{},"version":1}}'
+CONTAINERS='{"voicecon-bridge-bundle":{"downstreams":[],"environment":{},"image":"registry.customer.com/customer-internal/voice-bundles/voicecon-bridge:<+serviceVariables.voiceconBridgeBundleVersion>","lifecycle":{},"output":"none","secrets":{},"version":1}}'
 
 ENABLE_FIM='true'
 
-ENVIRONMENT='<+serviceVariables.twilioEnvironment>'
+ENVIRONMENT='<+serviceVariables.customerEnvironment>'
 
 OCI_BUNDLE_CONTAINERS='voicecon-bridge-bundle'
 
-REALM='<+serviceVariables.twilioRealm>'
+REALM='<+serviceVariables.customerRealm>'
 
-ROLE='<+serviceVariables.twilioRole>'
+ROLE='<+serviceVariables.customerRole>'
 
 SERVICE_DISCOVERY='global'
 
-WORLD='<+serviceVariables.twilioWorld>'
+WORLD='<+serviceVariables.customerWorld>'
 EOF
 
 set -a
@@ -46,25 +46,25 @@ set +a
 trap config_error ERR
 
 config_error() {
-    aws s3 cp "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/configuration_error.sh" - | /bin/bash
+    aws s3 cp "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/configuration_error.sh" - | /bin/bash
 }
 
 # grab configuring.sh script from S3 and run
-aws s3 cp "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/configuring.sh" - | /bin/bash
+aws s3 cp "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/configuring.sh" - | /bin/bash
 
 # iterate through command separated CLOUD_INIT_SCRIPT_URLS
-echo "attempting to sync files from s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management to /bootstrap/0"
-aws s3 ls "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" >/dev/null || (echo "ERROR - Unable to copy bootstrap scripts from s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" >&2; config_error; exit 1)
-aws s3 sync "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" /bootstrap/"0"
+echo "attempting to sync files from s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management to /bootstrap/0"
+aws s3 ls "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" >/dev/null || (echo "ERROR - Unable to copy bootstrap scripts from s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" >&2; config_error; exit 1)
+aws s3 sync "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/bootstrap/ipaddress_management" /bootstrap/"0"
 cd /bootstrap/"0"
 for script in $(find /bootstrap/"0" -maxdepth 1 -type f | sort); do
   echo "executing file: '$script'"
   chmod a+x $script
   "$script"
 done
-echo "attempting to sync files from s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion> to /bootstrap/1"
-aws s3 ls "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" >/dev/null || (echo "ERROR - Unable to copy bootstrap scripts from s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" >&2; config_error; exit 1)
-aws s3 sync "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" /bootstrap/"1"
+echo "attempting to sync files from s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion> to /bootstrap/1"
+aws s3 ls "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" >/dev/null || (echo "ERROR - Unable to copy bootstrap scripts from s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" >&2; config_error; exit 1)
+aws s3 sync "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/tcfv1.1_releases/release-<+serviceVariables.osBootstrapVersion>" /bootstrap/"1"
 cd /bootstrap/"1"
 for script in $(find /bootstrap/"1" -maxdepth 1 -type f | sort); do
   echo "executing file: '$script'"
@@ -75,12 +75,12 @@ done
 # install script that runs on resume for hibernated hosts
 cat <<'EOF' > /etc/pm/sleep.d/hibernation-resume.sh
 #!/bin/bash
-aws s3 cp "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/resuming.sh" - | /bin/bash
-aws s3 cp "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/running.sh" - | /bin/bash
+aws s3 cp "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/resuming.sh" - | /bin/bash
+aws s3 cp "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/running.sh" - | /bin/bash
 EOF
 
 chmod a+x /etc/pm/sleep.d/hibernation-resume.sh
 
 # grab running.sh script from S3 and run
-aws s3 cp "s3://com.twilio.<+serviceVariables.twilioEnvironment>.platform-base/features/bootstrap/asg/running.sh" - | /bin/bash
+aws s3 cp "s3://com.customer.<+serviceVariables.customerEnvironment>.platform-base/features/bootstrap/asg/running.sh" - | /bin/bash
 --//--

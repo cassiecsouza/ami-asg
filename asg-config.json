@@ -27,19 +27,19 @@
     }
   ],
   "Tags": [
-    { "Key": "TwilioRole", "Value": "<+serviceVariables.twilioRole>", "PropagateAtLaunch": "true" },
+    { "Key": "customerRole", "Value": "<+serviceVariables.customerRole>", "PropagateAtLaunch": "true" },
     { "Key": "claimed_ownership", "Value": "true", "PropagateAtLaunch": "true" },
     { "Key": "creator", "Value": "harness", "PropagateAtLaunch": "true" },
     { "Key": "platform:managed-by", "Value": "autoscaling-group", "PropagateAtLaunch": "true" },
-    { "Key": "platform:role", "Value": "<+serviceVariables.twilioRole>", "PropagateAtLaunch": "true" },
-    { "Key": "platform:system", "Value": "<+serviceVariables.twilioSystem>", "PropagateAtLaunch": "true" },
-    { "Key": "platform:team", "Value": "<+serviceVariables.twilioTeam>", "PropagateAtLaunch": "true" },
-    { "Key": "realm", "Value": "<+serviceVariables.twilioRealm>", "PropagateAtLaunch": "true" },
+    { "Key": "platform:role", "Value": "<+serviceVariables.customerRole>", "PropagateAtLaunch": "true" },
+    { "Key": "platform:system", "Value": "<+serviceVariables.customerSystem>", "PropagateAtLaunch": "true" },
+    { "Key": "platform:team", "Value": "<+serviceVariables.customerTeam>", "PropagateAtLaunch": "true" },
+    { "Key": "realm", "Value": "<+serviceVariables.customerRealm>", "PropagateAtLaunch": "true" },
     { "Key": "tcss:classification", "Value": "<+serviceVariables.securityClassification>", "PropagateAtLaunch": "true" },
-    { "Key": "tcss:owner", "Value": "<+serviceVariables.twilioTeam>", "PropagateAtLaunch": "true" },
+    { "Key": "tcss:owner", "Value": "<+serviceVariables.customerTeam>", "PropagateAtLaunch": "true" },
     { "Key": "tcss:repo", "Value": "<+serviceVariables.creatorGitRepo>", "PropagateAtLaunch": "true" },
     { "Key": "tcss:tag-version", "Value": "1", "PropagateAtLaunch": "true" },
-    { "Key": "world", "Value": "<+serviceVariables.twilioWorld>", "PropagateAtLaunch": "true" }
+    { "Key": "world", "Value": "<+serviceVariables.customerWorld>", "PropagateAtLaunch": "true" }
   ],
   "TargetGroupARNs": "<+serviceVariables.targetGroupARNs.split(\",\")>",
   "VPCZoneIdentifier": "<+serviceVariables.enabledSubnetIds>"

@@ -21,7 +21,7 @@
       }
     ],
     "IamInstanceProfile": {
-      "Name": "<+serviceVariables.twilioRole>"
+      "Name": "<+serviceVariables.customerRole>"
     },
     "InstanceType": "<+serviceVariables.ec2InstanceType>",
     "MetadataOptions": {
@@ -47,11 +47,11 @@
           { "Key": "claimed_ownership", "Value": "true" },
           { "Key": "creator", "Value": "harness" },
           { "Key": "platform:managed-by", "Value": "autoscaling-group" },
-          { "Key": "platform:role", "Value": "<+serviceVariables.twilioRole>" },
-          { "Key": "platform:system", "Value": "<+serviceVariables.twilioSystem>" },
-          { "Key": "platform:team", "Value": "<+serviceVariables.twilioTeam>" },
+          { "Key": "platform:role", "Value": "<+serviceVariables.customerRole>" },
+          { "Key": "platform:system", "Value": "<+serviceVariables.customerSystem>" },
+          { "Key": "platform:team", "Value": "<+serviceVariables.customerTeam>" },
           { "Key": "tcss:classification", "Value": "<+serviceVariables.securityClassification>" },
-          { "Key": "tcss:owner", "Value": "<+serviceVariables.twilioTeam>" },
+          { "Key": "tcss:owner", "Value": "<+serviceVariables.customerTeam>" },
           { "Key": "tcss:repo", "Value": "<+serviceVariables.creatorGitRepo>" },
           { "Key": "tcss:tag-version", "Value": "1" }
         ]
@@ -62,11 +62,11 @@
           { "Key": "claimed_ownership", "Value": "true" },
           { "Key": "creator", "Value": "harness" },
           { "Key": "platform:managed-by", "Value": "autoscaling-group" },
-          { "Key": "platform:role", "Value": "<+serviceVariables.twilioRole>" },
-          { "Key": "platform:system", "Value": "<+serviceVariables.twilioSystem>" },
-          { "Key": "platform:team", "Value": "<+serviceVariables.twilioTeam>" },
+          { "Key": "platform:role", "Value": "<+serviceVariables.customerRole>" },
+          { "Key": "platform:system", "Value": "<+serviceVariables.customerSystem>" },
+          { "Key": "platform:team", "Value": "<+serviceVariables.customerTeam>" },
           { "Key": "tcss:classification", "Value": "<+serviceVariables.securityClassification>" },
-          { "Key": "tcss:owner", "Value": "<+serviceVariables.twilioTeam>" },
+          { "Key": "tcss:owner", "Value": "<+serviceVariables.customerTeam>" },
           { "Key": "tcss:repo", "Value": "<+serviceVariables.creatorGitRepo>" },
           { "Key": "tcss:tag-version", "Value": "1" }
         ]
@@ -80,11 +80,11 @@
         { "Key": "claimed_ownership", "Value": "true" },
         { "Key": "creator", "Value": "harness" },
         { "Key": "platform:managed-by", "Value": "autoscaling-group" },
-        { "Key": "platform:role", "Value": "<+serviceVariables.twilioRole>" },
-        { "Key": "platform:system", "Value": "<+serviceVariables.twilioSystem>" },
-        { "Key": "platform:team", "Value": "<+serviceVariables.twilioTeam>" },
+        { "Key": "platform:role", "Value": "<+serviceVariables.customerRole>" },
+        { "Key": "platform:system", "Value": "<+serviceVariables.customerSystem>" },
+        { "Key": "platform:team", "Value": "<+serviceVariables.customerTeam>" },
         { "Key": "tcss:classification", "Value": "<+serviceVariables.securityClassification>" },
-        { "Key": "tcss:owner", "Value": "<+serviceVariables.twilioTeam>" },
+        { "Key": "tcss:owner", "Value": "<+serviceVariables.customerTeam>" },
         { "Key": "tcss:repo", "Value": "<+serviceVariables.creatorGitRepo>" },
         { "Key": "tcss:tag-version", "Value": "1" }
       ]
